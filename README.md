@@ -192,6 +192,70 @@ Additional instructions for configuring, using, and building libraries
 in superproject may be found in the
 [Boost Wiki](https://github.com/boostorg/boost/wiki/Getting-Started).
 
+## HTTP/2 Conformance Testing
+
+### Installing h2spec
+
+The server-side conformance test (`h2spec_server`) requires the external
+[h2spec](https://github.com/summerwind/h2spec) tool. The client-side test
+(`h2spec_client`) is self-contained and does not need h2spec.
+
+**Pre-built binary (Linux amd64):**
+```bash
+curl -fsSL https://github.com/summerwind/h2spec/releases/latest/download/h2spec_linux_amd64.tar.gz | tar xz
+sudo mv h2spec /usr/local/bin/
+```
+
+**Docker (any platform):**
+```bash
+docker run --rm --net=host summerwind/h2spec -h 127.0.0.1 -p 9080 --timeout 5
+```
+
+### Server conformance test (h2spec_server)
+
+The file `test/beast/http2/h2spec_server.cpp` implements a standalone HTTP/2
+clear-text (h2c) server designed to be tested with h2spec.
+
+The server exercises Beast's HTTP/2 primitives directly: frame
+parsing/serialization, HPACK header compression, stream state management
+(RFC 9113 Section 5.1), and flow control. It responds with a simple `200 OK`
+to every valid request.
+
+```bash
+# Build the server (from the build directory)
+cmake --build . --target h2spec_server
+
+# Start the server
+./test/beast/http2/h2spec_server -p 9080
+
+# In another terminal, run h2spec
+h2spec -h 127.0.0.1 -p 9080 --timeout 5
+
+# Or with Docker
+docker run --rm --net=host summerwind/h2spec -h 127.0.0.1 -p 9080 --timeout 5
+```
+
+### Client conformance test (h2spec_client)
+
+The file `test/beast/http2/h2spec_client.cpp` implements a standalone client
+conformance test that embeds a mock HTTP/2 server and connects a Beast
+`connection<tcp::socket>` client to it, verifying correct client-side protocol
+behavior (SETTINGS exchange, PING auto-ACK, GOAWAY handling, RST_STREAM,
+frame size validation, and invalid SETTINGS rejection).
+
+No external tools are required.
+
+```bash
+# Build the client test (from the build directory)
+cmake --build . --target h2spec_client
+
+# Run (default port 9081)
+./test/beast/http2/h2spec_client
+
+# Or with custom port
+./test/beast/http2/h2spec_client -p 9082
+```
+
 ## Visual Studio
 
 CMake may be used to generate a very nice Visual Studio solution and
