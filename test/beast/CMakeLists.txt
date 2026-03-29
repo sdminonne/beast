@@ -11,6 +11,7 @@
 add_subdirectory(_experimental)
 add_subdirectory(core)
 add_subdirectory(http)
+add_subdirectory(http2)
 add_subdirectory(ssl)
 add_subdirectory(websocket)
 add_subdirectory(zlib)
@@ -23,6 +24,7 @@ add_executable(boost_beast_tests_self_contained
     Jamfile
     core.cpp
     http.cpp
+    http2.cpp
     ssl.cpp
     version.cpp
     websocket.cpp
@@ -32,6 +34,7 @@ source_group("" FILES
     Jamfile
     core.cpp
     http.cpp
+    http2.cpp
     ssl.cpp
     version.cpp
     websocket.cpp

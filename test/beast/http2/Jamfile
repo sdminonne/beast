@@ -1,0 +1,53 @@
+#
+# Copyright (c) 2025 Salvatore Minonne
+#
+# Distributed under the Boost Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+#
+# Official repository: https://github.com/boostorg/beast
+#
+
+local SOURCES =
+    error.cpp
+    frame.cpp
+    settings.cpp
+    stream_state.cpp
+    connection.cpp
+    stream.cpp
+    stream_read_write.cpp
+    message_adapter.cpp
+    flow_control.cpp
+    push_promise.cpp
+    upgrade.cpp
+    ssl.cpp
+    hpack/integer.cpp
+    hpack/huffman.cpp
+    hpack/static_table.cpp
+    hpack/dynamic_table.cpp
+    hpack/decoder.cpp
+    hpack/encoder.cpp
+    ;
+
+local RUN_TESTS ;
+
+for local f in $(SOURCES)
+{
+    RUN_TESTS += [ run $(f)
+        /boost/beast/test//lib-test
+    ] ;
+}
+
+alias run-tests : $(RUN_TESTS) ;
+
+exe fat-tests :
+    $(SOURCES)
+    /boost/beast/test//lib-test
+    ;
+
+explicit fat-tests ;
+
+run $(SOURCES)
+    /boost/beast/test//lib-test
+    : : : : run-fat-tests ;
+
+explicit run-fat-tests ;

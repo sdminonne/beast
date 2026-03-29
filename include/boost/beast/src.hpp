@@ -52,6 +52,16 @@ the program, with the macro BOOST_BEAST_SEPARATE_COMPILATION defined.
 #include <boost/beast/http/impl/status.ipp>
 #include <boost/beast/http/impl/verb.ipp>
 
+#include <boost/beast/http2/impl/error.ipp>
+#include <boost/beast/http2/impl/frame.ipp>
+#include <boost/beast/http2/impl/settings.ipp>
+#include <boost/beast/http2/hpack/impl/integer.ipp>
+#include <boost/beast/http2/hpack/impl/huffman.ipp>
+#include <boost/beast/http2/hpack/impl/static_table.ipp>
+#include <boost/beast/http2/hpack/impl/dynamic_table.ipp>
+#include <boost/beast/http2/hpack/impl/decoder.ipp>
+#include <boost/beast/http2/hpack/impl/encoder.ipp>
+
 #include <boost/beast/websocket/detail/hybi13.ipp>
 #include <boost/beast/websocket/detail/mask.ipp>
 #include <boost/beast/websocket/detail/pmd_extension.ipp>
